@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Object Detection Platform | Log In{% endblock %}
+{% block content %}
+<h2>Log In</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Log In</button>
+</form>
+<p>No account? <a href="{% url 'register' %}">Create new account</a></p>
+{% endblock %}

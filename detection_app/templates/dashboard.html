@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Object Detection Platform | Dashboard{% endblock %}
+{% block content %}
+<h2>My Images</h2>
+<a class="btn btn-success mb-3" href="{% url 'add_image_feed' %}">Upload Image</a>
+
+<div class="row row-cols-2 g-4">
+    {% for img in images %}
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6 d-flex justify-content-center align-items-center" style="background-color:#f8f9fa;">
+              <a href="{{ img.original_image.url }}" target="_blank">
+                <img src="{{ img.original_image.url }}"
+                     class="img-fluid"
+                     style="max-height:200px; object-fit:contain;"
+                     alt="Original Image">
+              </a>
+            </div>
+            <div class="col-6 d-flex justify-content-center align-items-center" style="background-color:#f8f9fa;">
+              {% if img.processed %}
+              <a href="{{ img.image.url }}" target="_blank">
+                <img src="{{ img.image.url }}"
+                     class="img-fluid"
+                     style="max-height:200px; object-fit:contain;"
+                     alt="Processed Image">
+              </a>
+              {% else %}
+              <p>Not processed yet</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <div>
+            {% if img.processed %}
+            <p class="mb-0">Object: {{ img.detected_class }} - {{ img.confidence|floatformat:2 }}</p>
+            {% else %}
+            <p class="mb-0">Not processed</p>
+            {% endif %}
+          </div>
+          <div>
+            {% if not img.processed %}
+            <a class="btn btn-primary" href="{% url 'process_image' img.id %}">Process Image</a>
+            {% endif %}
+            <a class="btn btn-danger" href="{% url 'delete_image' img.id %}"
+               onclick="return confirm('Delete this Image?');">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>No uploaded images</p>
+    {% endfor %}
+</div>
+{% endblock %}
